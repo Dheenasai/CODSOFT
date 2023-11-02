@@ -1,0 +1,670 @@
+Task-1
+
+Create a program that generates a random number and asks the
+user to guess it. Provide feedback on whether the guess is too
+high or too low until the user guesses the correct number.
+
+
+Program code:
+
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+int main() {
+    // Seed the random number generator
+    std::srand(std::time(0));
+
+    // Generate a random number between 1 and 100
+    int random_number = std::rand() % 100 + 1;
+    int user_guess;
+    int attempts = 0;
+
+    std::cout << "Welcome to the Guess the Number game!\n";
+    std::cout << "I'm thinking of a number between 1 and 100. Can you guess it?\n";
+
+    while (true) {
+        std::cout << "Enter your guess: ";
+        std::cin >> user_guess;
+
+        if (std::cin.fail()) {
+            std::cin.clear(); // Clear the error flag
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Please enter a valid number.\n";
+            continue;
+        }
+
+        attempts++;
+
+        if (user_guess == random_number) {
+            std::cout << "Congratulations! You guessed the correct number (" << random_number << ") in " << attempts << " tries.\n";
+            break;
+        } else if (user_guess < random_number) {
+            std::cout << "Too low! Try again.\n";
+        } else {
+            std::cout << "Too high! Try again.\n";
+        }
+    }
+
+    return 0;
+}
+
+
+Sample Output:
+
+
+Welcome to the Guess the Number game!
+I'm thinking of a number between 1 and 100. Can you guess it?
+Enter your guess: 50
+Too low! Try again.
+Enter your guess: 75
+Too high! Try again.
+Enter your guess: 60
+Too high! Try again.
+Enter your guess: 55
+Too low! Try again.
+Enter your guess: 58
+Congratulations! You guessed the correct number (58) in 5 tries.
+
+
+
+
+
+Task-2
+
+
+Develop a calculator program that performs basic arithmetic
+operations such as addition, subtraction, multiplication, and
+division. Allow the user to input two numbers and choose an
+operation to perform.
+
+
+Program Code:
+
+#include <iostream>
+
+int main() {
+    double num1, num2, result;
+    char operation;
+
+    std::cout << "Simple Calculator\n";
+    std::cout << "Enter the first number: ";
+    std::cin >> num1;
+
+    std::cout << "Enter an operator (+, -, *, /): ";
+    std::cin >> operation;
+
+    std::cout << "Enter the second number: ";
+    std::cin >> num2;
+
+    switch (operation) {
+        case '+':
+            result = num1 + num2;
+            std::cout << "Result: " << num1 << " + " << num2 << " = " << result << "\n";
+            break;
+        case '-':
+            result = num1 - num2;
+            std::cout << "Result: " << num1 << " - " << num2 << " = " << result << "\n";
+            break;
+        case '*':
+            result = num1 * num2;
+            std::cout << "Result: " << num1 << " * " << num2 << " = " << result << "\n";
+            break;
+        case '/':
+            if (num2 != 0) {
+                result = num1 / num2;
+                std::cout << "Result: " << num1 << " / " << num2 << " = " << result << "\n";
+            } else {
+                std::cout << "Error: Division by zero is not allowed.\n";
+            }
+            break;
+        default:
+            std::cout << "Invalid operator. Please use +, -, *, or /.\n";
+            break;
+    }
+
+    return 0;
+}
+
+Sample Output:
+
+Simple Calculator
+Enter the first number: 10
+Enter an operator (+, -, *, /): *
+Enter the second number: 5
+Result: 10 * 5 = 50
+
+
+TASK 3
+
+
+
+TIC-TAC-TOE GAME
+
+Build a simple console-based Tic-Tac-Toe game that
+allows two players to play against each other
+
+Game Board: Create a 3x3 grid as the game board.
+Players: Assign
+"X"
+and "O" to two players.
+
+Display Board: Show the current state of the board.
+Player Input: Prompt the current player to enter their move.
+Update Board: Update the game board with the player
+'
+s move.
+
+Check for Win: Check if the current player has won.
+Check for Draw: Determine if the game is a draw.
+Switch Players: Alternate turns between
+"X"
+and "O"
+
+players.
+
+Display Result: Show the result of the game (win, draw, or ongoing).
+Play Again: Ask if the players want to play another game.
+
+
+Program code:
+
+
+#include <iostream>
+#include <vector>
+
+void displayBoard(const std::vector<std::vector<char>>& board) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            std::cout << board[i][j];
+            if (j < 2) std::cout << " | ";
+        }
+        std::cout << std::endl;
+        if (i < 2) std::cout << "---------" << std::endl;
+    }
+    std::cout << std::endl;
+}
+
+bool checkWin(const std::vector<std::vector<char>>& board, char player) {
+    for (int i = 0; i < 3; i++) {
+        if (board[i][0] == player && board[i][1] == player && board[i][2] == player)
+            return true;
+    }
+
+        for (int i = 0; i < 3; i++) {
+        if (board[0][i] == player && board[1][i] == player && board[2][i] == player)
+            return true;
+    }
+
+
+    if (board[0][0] == player && board[1][1] == player && board[2][2] == player)
+        return true;
+    if (board[0][2] == player && board[1][1] == player && board[2][0] == player)
+        return true;
+
+    return false;
+}
+
+
+bool checkDraw(const std::vector<std::vector<char>>& board) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (board[i][j] == ' ')
+                return false;
+        }
+    }
+    return true;
+}
+
+int main() {
+    char currentPlayer = 'X';
+    std::vector<std::vector<char>> board(3, std::vector<char>(3, ' '));
+
+    bool gameWon = false;
+    bool gameDraw = false;
+
+    std::cout << "Welcome to Tic-Tac-Toe!" << std::endl;
+
+    do {
+        
+        displayBoard(board);
+
+
+        int row, col;
+        std::cout << "Player " << currentPlayer << ", enter your move (row and column, e.g., 1 2): ";
+        std::cin >> row >> col;
+
+        
+        if (row < 1 || row > 3 || col < 1 || col > 3 || board[row - 1][col - 1] != ' ') {
+            std::cout << "Invalid move. Try again." << std::endl;
+            continue;
+        }
+
+
+        board[row - 1][col - 1] = currentPlayer;
+
+       
+        if (checkWin(board, currentPlayer)) {
+            displayBoard(board);
+            std::cout << "Player " << currentPlayer << " wins!" << std::endl;
+            gameWon = true;
+        }
+
+
+        if (checkDraw(board)) {
+            displayBoard(board);
+            std::cout << "It's a draw!" << std::endl;
+            gameDraw = true;
+        }
+
+
+        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+
+    } while (!gameWon && !gameDraw);
+
+    std::cout << "Thank you for playing Tic-Tac-Toe!" << std::endl;
+
+    return 0;
+}
+
+
+
+Sample Output:
+
+
+Welcome to Tic-Tac-Toe!
+   |   |   
+---------
+   |   |   
+---------
+   |   |   
+
+Player X, enter your move (row and column, e.g., 1 2): 1 1
+ X |   |   
+---------
+   |   |   
+---------
+   |   |   
+
+Player O, enter your move (row and column, e.g., 1 2): 2 2
+ X |   |   
+---------
+   | O |   
+---------
+   |   |   
+
+... (Game Continues)
+
+Player X, enter your move (row and column, e.g., 1 2): 3 1
+ X | O | X 
+---------
+   | O |   
+---------
+ X |   |   
+
+Player O, enter your move (row and column, e.g., 1 2): 2 1
+ X | O | X 
+---------
+ O | O |   
+---------
+ X |   |   
+
+Player X, enter your move (row and column, e.g., 1 2): 2 3
+ X | O | X 
+---------
+ O | O | X 
+---------
+ X |   |   
+
+
+
+Task-4
+
+
+Build a simple console-based to-do list manager that allows users to add, view, and delete tasks
+
+Task Input: Allow users to input tasks they want to add to the list.
+Add Task: Implement a function to add tasks to the list.
+View Tasks: Display the list of tasks with their status (completed or
+pending).
+Mark Task as Completed: Allow users to mark tasks as completed.
+Remove Task: Provide an option to remove tasks from the list.
+
+
+Input:
+
+
+#include <iostream>
+#include <vector>
+#include <string>
+
+struct Task {
+    std::string description;
+    bool completed;
+};
+
+void addTask(std::vector<Task>& tasks, const std::string& description) {
+    Task newTask = {description, false};
+    tasks.push_back(newTask);
+    std::cout << "Task added: " << description << std::endl;
+}
+
+void viewTasks(const std::vector<Task>& tasks) {
+    std::cout << "Task List:" << std::endl;
+    for (size_t i = 0; i < tasks.size(); i++) {
+        std::cout << i + 1 << ". " << tasks[i].description;
+        if (tasks[i].completed) {
+            std::cout << " (Completed)";
+        }
+        std::cout << std::endl;
+    }
+}
+
+void markTaskAsCompleted(std::vector<Task>& tasks, size_t index) {
+    if (index >= 1 && index <= tasks.size()) {
+        tasks[index - 1].completed = true;
+        std::cout << "Task marked as completed: " << tasks[index - 1].description << std::endl;
+    } else {
+        std::cout << "Invalid task index." << std::endl;
+    }
+}
+
+void removeTask(std::vector<Task>& tasks, size_t index) {
+    if (index >= 1 && index <= tasks.size()) {
+        std::cout << "Task removed: " << tasks[index - 1].description << std::endl;
+        tasks.erase(tasks.begin() + index - 1);
+    } else {
+        std::cout << "Invalid task index." << std::endl;
+    }
+}
+
+int main() {
+    std::vector<Task> tasks;
+
+    while (true) {
+        std::cout << "\nMenu:\n1. Add Task\n2. View Tasks\n3. Mark Task as Completed\n4. Remove Task\n5. Quit\nEnter your choice: ";
+        int choice;
+        std::cin >> choice;
+
+        if (choice == 5) {
+            break;
+        }
+
+        switch (choice) {
+            case 1:
+                std::cin.ignore(); // Clear the input buffer
+                std::string description;
+                std::cout << "Enter task description: ";
+                std::getline(std::cin, description);
+                addTask(tasks, description);
+                break;
+            case 2:
+                viewTasks(tasks);
+                break;
+            case 3:
+                size_t index;
+                std::cout << "Enter the task number to mark as completed: ";
+                std::cin >> index;
+                markTaskAsCompleted(tasks, index);
+                break;
+            case 4:
+                std::cout << "Enter the task number to remove: ";
+                std::cin >> index;
+                removeTask(tasks, index);
+                break;
+            default:
+                std::cout << "Invalid choice. Please try again." << std::endl;
+        }
+    }
+
+    return 0;
+}
+
+
+Sample Output:
+
+
+Menu:
+1. Add Task
+2. View Tasks
+3. Mark Task as Completed
+4. Remove Task
+5. Quit
+Enter your choice: 1
+Enter task description: Buy groceries
+Task added: Buy groceries
+
+Menu:
+1. Add Task
+2. View Tasks
+3. Mark Task as Completed
+4. Remove Task
+5. Quit
+Enter your choice: 1
+Enter task description: Clean the house
+Task added: Clean the house
+
+Menu:
+1. Add Task
+2. View Tasks
+3. Mark Task as Completed
+4. Remove Task
+5. Quit
+Enter your choice: 2
+Task List:
+1. Buy groceries
+2. Clean the house
+
+Menu:
+1. Add Task
+2. View Tasks
+3. Mark Task as Completed
+4. Remove Task
+5. Quit
+Enter your choice: 3
+Enter the task number to mark as completed: 1
+Task marked as completed: Buy groceries
+
+Menu:
+1. Add Task
+2. View Tasks
+3. Mark Task as Completed
+4. Remove Task
+5. Quit
+Enter your choice: 2
+Task List:
+1. Buy groceries (Completed)
+2. Clean the house
+
+Menu:
+1. Add Task
+2. View Tasks
+3. Mark Task as Completed
+4. Remove Task
+5. Quit
+Enter your choice: 4
+Enter the task number to remove: 2
+Task removed: Clean the house
+
+Menu:
+1. Add Task
+2. View Tasks
+3. Mark Task as Completed
+4. Remove Task
+5. Quit
+Enter your choice: 5
+
+
+Task-5
+
+Develop a system to manage books, borrowers, and transactions in a library.
+
+
+Book Database: Store book information (title, author, ISBN) in a
+database.
+Book Search: Allow users to search for books based on title, author, or
+ISBN.
+Book Checkout: Enable librarians to check out books to borrowers.
+Book Return: Record book returns and update availability status.
+Fine Calculation: Implement a fine calculation system for overdue
+books.
+User Interface: Design a user-friendly interface for easy interaction.
+
+
+
+Input:
+
+
+#include <iostream>
+#include <vector>
+#include <string>
+
+struct Book {
+    std::string title;
+    std::string author;
+    std::string ISBN;
+    bool available;
+};
+
+struct Borrower {
+    std::string name;
+    int borrowedBooks;
+};
+
+struct Transaction {
+    std::string bookISBN;
+    std::string borrowerName;
+    bool checkedOut;
+};
+
+void searchBooks(const std::vector<Book>& books, const std::string& keyword) {
+    std::cout << "Search Results:\n";
+    for (const Book& book : books) {
+        if (book.title.find(keyword) != std::string::npos || 
+            book.author.find(keyword) != std::string::npos || 
+            book.ISBN.find(keyword) != std::string::npos) {
+            std::cout << "Title: " << book.title << ", Author: " << book.author << ", ISBN: " << book.ISBN << ", Available: " << (book.available ? "Yes" : "No") << std::endl;
+        }
+    }
+}
+
+void checkOutBook(std::vector<Book>& books, const std::string& ISBN, std::vector<Transaction>& transactions, const std::string& borrowerName) {
+    for (Book& book : books) {
+        if (book.ISBN == ISBN && book.available) {
+            book.available = false;
+            transactions.push_back({ISBN, borrowerName, true});
+            std::cout << "Book checked out successfully.\n";
+            return;
+        }
+    }
+    std::cout << "Book not found or already checked out.\n";
+}
+
+void returnBook(std::vector<Book>& books, const std::string& ISBN, std::vector<Transaction>& transactions) {
+    for (Book& book : books) {
+        if (book.ISBN == ISBN && !book.available) {
+            book.available = true;
+            transactions.push_back({ISBN, "", false});
+            std::cout << "Book returned successfully.\n";
+            return;
+        }
+    }
+    std::cout << "Book not found or already returned.\n";
+}
+
+int main() {
+    std::vector<Book> books = {
+        {"Book1", "Author1", "ISBN1", true},
+        {"Book2", "Author2", "ISBN2", true},
+        {"Book3", "Author3", "ISBN3", true}
+    };
+
+    std::vector<Borrower> borrowers = {
+        {"Borrower1", 0},
+        {"Borrower2", 0}
+    };
+
+    std::vector<Transaction> transactions;
+
+    while (true) {
+        std::cout << "\nMenu:\n1. Search Books\n2. Check Out Book\n3. Return Book\n4. Quit\nEnter your choice: ";
+        int choice;
+        std::cin >> choice;
+
+        if (choice == 4) {
+            break;
+        }
+
+        switch (choice) {
+            case 1:
+                std::cin.ignore();
+                std::string keyword;
+                std::cout << "Enter search keyword (title, author, or ISBN): ";
+                std::getline(std::cin, keyword);
+                searchBooks(books, keyword);
+                break;
+            case 2:
+                std::cin.ignore();
+                std::string checkoutISBN, borrowerName;
+                std::cout << "Enter ISBN of the book to check out: ";
+                std::getline(std::cin, checkoutISBN);
+                std::cout << "Enter borrower name: ";
+                std::getline(std::cin, borrowerName);
+                checkOutBook(books, checkoutISBN, transactions, borrowerName);
+                break;
+            case 3:
+                std::cin.ignore();
+                std::string returnISBN;
+                std::cout << "Enter ISBN of the book to return: ";
+                std::getline(std::cin, returnISBN);
+                returnBook(books, returnISBN, transactions);
+                break;
+            default:
+                std::cout << "Invalid choice. Please try again." << std::endl;
+        }
+    }
+
+    return 0;
+}
+
+
+
+Sample Output:
+
+
+Menu:
+1. Search Books
+2. Check Out Book
+3. Return Book
+4. Quit
+Enter your choice: 1
+Enter search keyword (title, author, or ISBN): Book2
+Search Results:
+Title: Book2, Author: Author2, ISBN: ISBN2, Available: Yes
+
+Menu:
+1. Search Books
+2. Check Out Book
+3. Return Book
+4. Quit
+Enter your choice: 2
+Enter ISBN of the book to check out: ISBN2
+Enter borrower name: Borrower1
+Book checked out successfully.
+
+Menu:
+1. Search Books
+2. Check Out Book
+3. Return Book
+4. Quit
+Enter your choice: 3
+Enter ISBN of the book to return: ISBN2
+Book returned successfully.
+
+Menu:
+1. Search Books
+2. Check Out Book
+3. Return Book
+4. Quit
+Enter your choice: 4
+
